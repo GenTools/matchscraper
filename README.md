@@ -29,7 +29,7 @@ matchscraper.py file. That way you won't have to enter it every time you run the
 
 3. Enter the url of the match you're interesed in. This should be for the page where you see the match's tree and the list of surnames on the left.
 
-4. It might take a couples minutes to run. When finished, it will create a CSV file with your match's name in the title. You can open the CSV file in excel. The file will contain three columns. The first contains all the surnames that occur in the tree of your match and  in the trees of the matches you share with that match. The second shows the number of trees each surname appears in. The third lists the names of the matches that have the surname in their tree. 
+4. It might take a couple minutes to run. When finished, it will create a CSV file with your match's name in the title. You can open the CSV file in excel. The file will contain three columns. The first contains all the surnames that occur in the tree of your match and in the trees of the matches you share with that match. The second shows the number of trees each surname appears in. The third lists the names of the matches that have the surname in their tree. 
 
 ## Tips
 
