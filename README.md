@@ -1,5 +1,7 @@
 # Matchscraper
 
+A script for finding the occurence of surnames among an Ancestry DNA match and their shared matches.
+
 ## Setup
 
 1. Install Python (version 2.7 or newer) if you don't have it already.
@@ -15,8 +17,7 @@ http://jonathansoma.com/lede/foundations-2018/classes/selenium/selenium-windows-
 For macOS:
 https://www.kenst.com/2015/03/installing-chromedriver-on-mac-osx/
 
-4. Download matchscraper.py script from this page and put it where you want it. (You might want to create an alias or put it in your 
-PATH.)
+4. Download matchscraper.py script from this page and put it where you want it. (You might want to create an alias or put it in your PATH.)
 
 ## Use
 
