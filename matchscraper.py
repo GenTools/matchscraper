@@ -19,6 +19,7 @@ debug = False
 exclusions = [] # names to exclude
 excluded = [] # names encountered from exclusion list
 url = ''
+matchList = []
 
 def logDbg(msg):
     global debug
@@ -65,7 +66,7 @@ def parseSurnames(pageString):
 
     return nameList
 
-def processMatch(driver, dict):
+def processMatch(driver, dict, url):
     global excluded
     global unkCounter
 
@@ -97,6 +98,7 @@ def processMatch(driver, dict):
 
     if matchName not in exclusions:
         processSurnames(driver, dict, matchName)
+        matchList.append((matchName, url))
     elif matchName not in excluded:
         excluded.append(matchName)
 
@@ -111,7 +113,7 @@ def processSharedMatch(driver, url, dict):
 
         time.sleep(7)
 
-        processMatch(driver, dict)
+        processMatch(driver, dict, url)
     except Exception as e:
         print "Could not open url: " + str(e)
 
@@ -129,6 +131,13 @@ def toCsv(name, dict):
             text += "\n"
     outfile.write(text.encode('utf-8'))
     outfile.close()
+
+    outfile2 = open(name + "_shared_matches.csv", "w")
+    fullText = ''
+    for line in matchList:
+        fullText += line[0] + ',' + line[1] + '\n'
+    outfile2.write(fullText.encode('utf-8'))
+    outfile2.close()
 
 def toTxt(name, dict):
     outfile = open(name + "_ancestry_surnames.txt", "w")
@@ -155,7 +164,7 @@ def processPrimeMatch(driver, dict, matches, url):
 
     driver.switch_to.default_content()
 
-    matchName = processMatch(driver, dict)
+    matchName = processMatch(driver, dict, url)
 
     '''go to shared matches'''
     try:
@@ -214,14 +223,34 @@ def processGroup(driver, groupName, groupDict):
     dict={}
     matches = []
     primeMatchUrls = groupDict[groupName]
+    isOnCurrentMatchUrl = True # don't pass url for first match - already on page
     for matchUrl in primeMatchUrls:
-        matchName = processPrimeMatch(driver, dict, matches, matchUrl)
+        if isOnCurrentMatchUrl:
+            processPrimeMatch(driver, dict, matches, '')
+            isOnCurrentMatchUrl = False
+        else:
+            matchUrl = convertFromBetaUrl(matchUrl)
+            processPrimeMatch(driver, dict, matches, matchUrl)
 
     for matchUrl in matches:
         processSharedMatch(driver, matchUrl, dict)
         logDbg(matchUrl)
 
     output(groupName, dict)
+
+def convertFromBetaUrl(url):
+    if "discoveryui-matches" in url:
+            betaSegment = "/discoveryui-matches/compare-ng/"
+            index = url.find(betaSegment)
+            url = url[index:]
+            if "/trees" in url:
+                index2 = url.find("/trees")
+                url = url[0:index2]
+            url = url.upper()
+            url = url.replace(betaSegment.upper(), "/dna/tests/")
+            url = url.replace("WITH", "match")
+            url = "https://www.ancestry.com" + url
+    return url
 
 def main():
     global username
@@ -261,6 +290,9 @@ def main():
     else:
         firstGroup = groupArr[0]
         url = groupDict[firstGroup][0]
+
+    '''convert url from beta version to old version'''
+    url = convertFromBetaUrl(url)
 
     options = webdriver.ChromeOptions()
     options.add_argument('headless')
