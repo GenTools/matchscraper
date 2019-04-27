@@ -132,12 +132,13 @@ def toCsv(name, dict):
     outfile.write(text.encode('utf-8'))
     outfile.close()
 
-    outfile2 = open(name + "_shared_matches.csv", "w")
-    fullText = ''
-    for line in matchList:
-        fullText += line[0] + ',' + line[1] + '\n'
-    outfile2.write(fullText.encode('utf-8'))
-    outfile2.close()
+    if len(sys.argv) > 1:
+        outfile2 = open(name + "_shared_matches.csv", "w")
+        fullText = "MATCH NAME,URL\n"
+        for line in matchList:
+            fullText += line[0] + ',' + line[1] + '\n'
+        outfile2.write(fullText.encode('utf-8'))
+        outfile2.close()
 
 def toTxt(name, dict):
     outfile = open(name + "_ancestry_surnames.txt", "w")
@@ -245,6 +246,12 @@ def convertFromBetaUrl(url):
             url = url[index:]
             if "/trees" in url:
                 index2 = url.find("/trees")
+                url = url[0:index2]
+            elif "/sharedmatches" in url:
+                index2 = url.find("/sharedmatches")
+                url = url[0:index2]
+            elif "/ethnicity" in url:
+                index2 = url.find("/ethnicity")
                 url = url[0:index2]
             url = url.upper()
             url = url.replace(betaSegment.upper(), "/dna/tests/")
