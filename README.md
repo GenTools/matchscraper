@@ -48,3 +48,5 @@ It is also possible to process multiple matches as a single group.
 2. In group mode, use the exclude column to exclude all the matches for which you know how you are related. This will prevent their trees from generating false leads on other surnames. Also exclude close relatives of matches, such as children and siblings, as otherwise all the surnames in their tree will be counted an extra time.
 
 3. Put all the matches whose MRCA is your brickwall ancestor into a single group with all of them marked 'yes' for exclude. Running in group mode will then give you a list of surnames drawing on all of your possible datapoints. 
+
+4. Keep in mind the commonness of surnames when evaluating the results. Sometimes it is more worthwhile to research an uncommon name that apears two or three times than a common name that appears ten times. 
